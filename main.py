@@ -25,10 +25,16 @@ if not hasattr(builtins, 'tf'):
 
 print("Model yükleniyor...")
 try:
-    model = load_model('imza_modeli.h5', safe_mode=False, custom_objects={'tf': tf})
+    model = load_model('model.h5', safe_mode=False, custom_objects={'tf': tf})
+    
+    def create_lambda_call(tf_module):
+        def lambda_call(inputs, mask=None, training=None):
+            return tf_module.abs(inputs[0] - inputs[1])
+        return lambda_call
+    
     for layer in model.layers:
         if isinstance(layer, tf.keras.layers.Lambda):
-            layer.call = lambda inputs, mask=None, training=None, tf_ref=tf: tf_ref.abs(inputs[0] - inputs[1])
+            layer.call = create_lambda_call(tf)
     
     print("Model başarıyla yüklendi!")
 except Exception as e:
@@ -60,13 +66,21 @@ async def verify_signature(
         processed_img1 = prepare_image(img1_bytes)
         processed_img2 = prepare_image(img2_bytes)
 
-        # 1. Tahmin Yap
+        # Tahmin Yap
         prediction = model.predict([processed_img1, processed_img2], verbose=0)
         score = float(prediction[0][0])
 
-        is_match = score > 0.5 
-
-        message = "İmza benzerliği: YÜKSEK" if is_match else "imza benzerliği: ORTA"
+        threshold = 0.5
+        is_match = score > threshold
+        
+        if score > 0.7:
+            message = "İmza benzerliği: ÇOK YÜKSEK"
+        elif score > threshold:
+            message = "İmza benzerliği: YÜKSEK"
+        elif score > 0.3:
+            message = "İmza benzerliği: ORTA"
+        else:
+            message = "İmza benzerliği: DÜŞÜK"
 
         return {
             "success": True,
