@@ -10,11 +10,10 @@ export class MainMenuService {
 
   constructor(private http:HttpClient){}
 
-  verifySignatures(file1:File, file2:File): Observable<any>{
-    
+  verifySignatures(file1: File, file2: File): Observable<any> {
     const formData = new FormData();
     formData.append('file1', file1);
-    formData.append('file2',file2);
-    return this.http.post(this.apiUrl, FormData)
+    formData.append('file2', file2);
+    return this.http.post(this.apiUrl, formData);
   }
 }
