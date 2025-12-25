@@ -18,6 +18,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+tf.config.threading.set_intra_op_parallelism_threads(1)
+tf.config.threading.set_inter_op_parallelism_threads(1)
 print("Model yükleniyor...")
 
 def create_lambda_call(tf_module):
@@ -33,9 +35,9 @@ try:
             layer.call = create_lambda_call(tf)
 
     model.summary()
-    print("✓ Model başarıyla yüklendi!")
+    print(" Model başarıyla yüklendi!")
 except Exception as e:
-    print("✗ Model yüklenemedi:", e)
+    print(" Model yüklenemedi:", e)
     raise
 
 
