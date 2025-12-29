@@ -42,19 +42,19 @@
                   
                       @if (result.confidence === 'çok yüksek') {
                         <span class="ml-2 capitalize text-green-900">
-                          Güven:{{ result.confidence }}
+                          Güven: {{ result.confidence }}
                         </span>
                       } @else if (result.confidence === 'yüksek') {
                         <span class="ml-2 capitalize text-green-700">
-                          {{ result.confidence }}
+                          Güven: {{ result.confidence }}
                         </span>
                       } @else if (result.confidence === 'orta') {
                         <span class="ml-2 capitalize text-yellow-500">
-                          {{ result.confidence }}
+                          Güven: {{ result.confidence }}
                         </span>
                       } @else {
                         <span class="ml-2 capitalize text-red-700">
-                          {{ result.confidence }}
+                          Güven: {{ result.confidence }}
                         </span>
                       }
                     </div>

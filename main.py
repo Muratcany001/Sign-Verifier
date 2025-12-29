@@ -40,7 +40,7 @@ except Exception as e:
     print(" Model yüklenemedi:", e)
     raise
 
-
+## Modelin öğrenmesini kolaylaştırmak için normalizasyon
 def prepare_image(image_bytes):
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     img = img.resize((112, 112))
